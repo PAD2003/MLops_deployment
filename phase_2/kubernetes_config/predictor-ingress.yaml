@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: predictor-ingress
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: prob1-service
+      port:
+        number: 80
+  rules:
+  - http:
+      paths:
+      - path: /phase-2/prob-1/predict
+        pathType: Prefix
+        backend:
+          service:
+            name: prob1-service
+            port:
+              number: 80
+  - http:
+      paths:
+      - path: /phase-2/prob-2/predict
+        pathType: Prefix
+        backend:
+          service:
+            name: prob2-service
+            port:
+              number: 80

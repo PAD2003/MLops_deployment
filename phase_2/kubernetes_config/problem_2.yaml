@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prob2-deployment
+  labels:
+    app: prob2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: prob2
+  template:
+    metadata:
+      labels:
+        app: prob2
+    spec:
+      containers:
+      - name: phase-2-prob-2
+        image: phase_2_prob_2:v1
+        ports:
+        - containerPort: 5040
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prob2-service
+spec:
+  selector:
+    app: prob2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5040
