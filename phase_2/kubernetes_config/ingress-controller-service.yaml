@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"controller","app.kubernetes.io/instance":"ingress-nginx","app.kubernetes.io/name":"ingress-nginx","app.kubernetes.io/part-of":"ingress-nginx","app.kubernetes.io/version":"1.8.1"},"name":"ingress-nginx-controller","namespace":"ingress-nginx"},"spec":{"ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack"}}
+
+  # Đổi tên của dịch vụ thành ingress-nginx-controller-external
+  name: ingress-nginx-controller-external
+  
+  # Gỡ bỏ các labels không cần thiết, sử dụng labels của External Service thay thế
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx-external
+  
+  # Gỡ bỏ type: NodePort và tạo External Service thay thế
+  # type: NodePort
+  
+spec:
+  # Sử dụng type: LoadBalancer cho dịch vụ External Service
+  type: LoadBalancer
+
+  # Chỉ định cổng 5040 của máy chủ Ubuntu cho dịch vụ External Service
+  ports:
+    - appProtocol: http
+      name: http
+      port: 5040
+      protocol: TCP
+      targetPort: http
+
+    - appProtocol: https
+      name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+
+  # Gỡ bỏ các nodePort không cần thiết
+  # ports:
+  #   - appProtocol: http
+  #     name: http
+  #     nodePort: 32523
+  #     port: 80
+  #     protocol: TCP
+  #     targetPort: http
+  #   - appProtocol: https
+  #     name: https
+  #     nodePort: 30782
+  #     port: 443
+  #     protocol: TCP
+  #     targetPort: https
+  
+  selector:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+
+  # Gỡ bỏ externalTrafficPolicy và internalTrafficPolicy không cần thiết
+  # externalTrafficPolicy: Cluster
+  # internalTrafficPolicy: Cluster
+
+  # Gỡ bỏ sessionAffinity không cần thiết
+  # sessionAffinity: None
+
+  # Gỡ bỏ clusterIP và clusterIPs không cần thiết
+  # clusterIP: 10.109.122.109
+  # clusterIPs:
+  # - 10.109.122.109
+
+  # Gỡ bỏ resourceVersion và uid không cần thiết
+  # resourceVersion: "42389"
+  # uid: e7630ea4-25c6-4f47-ba08-950b5aebf648
+
+status:
+  # Gỡ bỏ loadBalancer không cần thiết
+  # loadBalancer: {}
