@@ -1,5 +1,5 @@
 import random
-import time
+# import time
 import pickle
 import pandas as pd
 import uvicorn
@@ -10,9 +10,9 @@ from pydantic import BaseModel
 from problem_config import create_prob_config
 from raw_data_processor import RawDataProcessor
 
-from evidently.test_suite import TestSuite
-from evidently import ColumnMapping
-from evidently.test_preset import NoTargetPerformanceTestPreset
+# from evidently.test_suite import TestSuite
+# from evidently import ColumnMapping
+# from evidently.test_preset import NoTargetPerformanceTestPreset
 
 class Data(BaseModel):
     id: str
@@ -36,28 +36,29 @@ class ModelPredictor:
             self.model = pickle.load(file)
 
     def detect_drift(self, feature_df) -> int:
-        # read reference dataset
-        train_x, train_y = RawDataProcessor.load_train_data(self.prob_config)
+        # # read reference dataset
+        # train_x, train_y = RawDataProcessor.load_train_data(self.prob_config)
 
-        column_mapping = ColumnMapping()
+        # column_mapping = ColumnMapping()
 
-        column_mapping.numerical_features = self.prob_config.numerical_cols
-        column_mapping.categorical_features = self.prob_config.categorical_cols
+        # column_mapping.numerical_features = self.prob_config.numerical_cols
+        # column_mapping.categorical_features = self.prob_config.categorical_cols
 
-        tests = TestSuite(tests=[
-            NoTargetPerformanceTestPreset(),
-        ])
+        # tests = TestSuite(tests=[
+        #     NoTargetPerformanceTestPreset(),
+        # ])
 
-        tests.run(current_data=train_x, reference_data=feature_df,
-                  column_mapping=column_mapping)
-        output_tests = tests.as_dict()
-        test_must_not_failed = ['Share of Out-of-List Values',
-                                'Column Types', 'Share of Out-of-Range Values']
-        for test in output_tests['tests']:
-            if test['name'] in test_must_not_failed and test['status'] == 'FAIL':
-                return 1
+        # tests.run(current_data=train_x, reference_data=feature_df,
+        #           column_mapping=column_mapping)
+        # output_tests = tests.as_dict()
+        # test_must_not_failed = ['Share of Out-of-List Values',
+        #                         'Column Types', 'Share of Out-of-Range Values']
+        # for test in output_tests['tests']:
+        #     if test['name'] in test_must_not_failed and test['status'] == 'FAIL':
+        #         return 1
         
-        return 0
+        # return 0
+        return random.choice([0, 1])
 
     def predict(self, data: Data):
         # preprocess

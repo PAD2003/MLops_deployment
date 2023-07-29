@@ -1,5 +1,5 @@
 category_encoders==2.6.1
-evidently==0.4.0
+# evidently==0.4.0
 fastapi==0.100.0
 imbalanced_learn==0.10.1
 imblearn==0.0
