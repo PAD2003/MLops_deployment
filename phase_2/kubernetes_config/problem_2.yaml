@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: phase-2-prob-2
-        image: pad2003/phase_2_prob_2:v1
+        image: pad2003/phase_2_prob_2:v2
         ports:
         - containerPort: 5040
 ---
