@@ -1,11 +1,13 @@
 import random
 import time
 import pickle
+import os
 import pandas as pd
 import uvicorn
 import yaml
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
+from pandas.util import hash_pandas_object
 
 from problem_config import create_prob_config
 from raw_data_processor import RawDataProcessor
@@ -44,10 +46,10 @@ class ModelPredictor:
             categorical_cols=self.prob_config.categorical_cols,
             category_index=self.category_index,
         )
-        # # save request data for improving models
-        # ModelPredictor.save_request_data(
-        #     feature_df, self.prob_config.captured_data_dir, data.id
-        # )
+        # save request data for improving models
+        ModelPredictor.save_request_data(
+            feature_df, self.prob_config.captured_data_dir, data.id
+        )
         
         prediction = self.model.predict(feature_df)
         is_drifted = self.detect_drift(feature_df)
@@ -58,15 +60,15 @@ class ModelPredictor:
             "drift": is_drifted,
         }
 
-    # @staticmethod
-    # def save_request_data(feature_df: pd.DataFrame, captured_data_dir, data_id: str):
-    #     if data_id.strip():
-    #         filename = data_id
-    #     else:
-    #         filename = hash_pandas_object(feature_df).sum()
-    #     output_file_path = os.path.join(captured_data_dir, f"{filename}.parquet")
-    #     feature_df.to_parquet(output_file_path, index=False)
-    #     return output_file_path
+    @staticmethod
+    def save_request_data(feature_df: pd.DataFrame, captured_data_dir, data_id: str):
+        if data_id.strip():
+            filename = data_id
+        else:
+            filename = hash_pandas_object(feature_df).sum()
+        output_file_path = os.path.join(captured_data_dir, f"{filename}.parquet")
+        feature_df.to_parquet(output_file_path, index=False)
+        return output_file_path
 
 class PredictorApi:
     def __init__(self, predictor: ModelPredictor):
