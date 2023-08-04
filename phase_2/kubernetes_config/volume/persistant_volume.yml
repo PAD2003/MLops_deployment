@@ -19,4 +19,4 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - example-node
+          - ubuntu-s-2vcpu-4gb-sgp1-01
