@@ -19,6 +19,16 @@ spec:
         image: pad2003/phase_3_prob_2:v1
         ports:
         - containerPort: 5040
+        volumeMounts:
+        - name: prob2-captured-data
+          mountPath: problem_2/data/captured_data/phase-3/prob-2
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "500m" 
+          limits:
+            memory: "500Mi"
+            cpu: "2000m"
 ---
 apiVersion: v1
 kind: Service
