@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: phase_3_deployment
+  name: phase-3-deploy
   labels:
-    app: phase_3
+    app: phase-3
 spec:
   replicas: 5
   selector:
     matchLabels:
-      app: phase_3
+      app: phase-3
   template:
     metadata:
       labels:
-        app: phase_3
+        app: phase-3
     spec:
       containers:
-      - name: phase_3
+      - name: phase-3
         image: pad2003/phase_3:v1
         ports:
         - containerPort: 5040
@@ -23,10 +23,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: phase_3_service
+  name: phase-3-svc
 spec:
   selector:
-    app: phase_3
+    app: phase-3
   ports:
     - protocol: TCP
       port: 80
