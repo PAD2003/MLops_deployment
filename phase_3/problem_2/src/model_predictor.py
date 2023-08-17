@@ -1,18 +1,19 @@
-import argparse
+# import argparse
 import logging
 import os
-import pickle
+# import pickle
 import time
 import pandas as pd
 import uvicorn
 import yaml
+import mlflow
 from fastapi import FastAPI, Request
 from pandas.util import hash_pandas_object
 from pydantic import BaseModel
 
 from problem_config import ProblemConst, create_prob_config
 from raw_data_processor import RawDataProcessor
-from utils import AppConfig, AppPath
+# from utils import AppConfig, AppPath
 
 # from evidently.test_suite import TestSuite
 # from evidently import ColumnMapping
@@ -39,9 +40,11 @@ class ModelPredictor:
         # load category_index
         self.category_index = RawDataProcessor.load_category_index(self.prob_config)
 
-        # load model
-        with open(self.config["weight_path"], 'rb') as file:
-            self.model = pickle.load(file)
+        # # load model
+        # with open(self.config["weight_path"], 'rb') as file:
+        #     self.model = pickle.load(file)
+
+        self.model = mlflow.pyfunc.load_model(self.config["weight_path"])
 
     def detect_drift(self, feature_df) -> int:
         # # read reference dataset
