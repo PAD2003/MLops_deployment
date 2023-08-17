@@ -22,13 +22,13 @@ spec:
         # volumeMounts:
         # - name: prob1-captured-data
         #   mountPath: problem_1/data/captured_data/phase-3/prob-1
-        resources:
-          requests:
-            memory: "100Mi"
-            cpu: "300m" 
-          limits:
-            memory: "500Mi"
-            cpu: "400m"
+        # resources:
+        #   requests:
+        #     memory: "100Mi"
+        #     cpu: "300m" 
+        #   limits:
+        #     memory: "500Mi"
+        #     cpu: "400m"
 ---
 apiVersion: v1
 kind: Service
