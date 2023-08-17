@@ -5,7 +5,7 @@ metadata:
   labels:
     app: prob2
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: prob2
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: phase-3-prob-2
-        image: pad2003/phase_3_prob_2:v1
+        image: pad2003/phase_3_prob_2:v2
         ports:
         - containerPort: 5040
         # volumeMounts:
@@ -24,11 +24,11 @@ spec:
         #   mountPath: problem_2/data/captured_data/phase-3/prob-2
         resources:
           requests:
-            memory: "50Mi"
-            cpu: "500m" 
+            memory: "100Mi"
+            cpu: "300m" 
           limits:
             memory: "500Mi"
-            cpu: "2000m"
+            cpu: "400m"
 ---
 apiVersion: v1
 kind: Service

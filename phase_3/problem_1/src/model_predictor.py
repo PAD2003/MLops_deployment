@@ -2,7 +2,7 @@
 # import logging
 import os
 # import random
-import time
+# import time
 import pickle
 # import mlflow
 import pandas as pd
@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from problem_config import ProblemConst, create_prob_config
 from raw_data_processor import RawDataProcessor
 # from utils import AppConfig, AppPath
+import mlflow
 
 PREDICTOR_API_PORT = 8000
 
@@ -40,8 +41,10 @@ class ModelPredictor:
         self.category_index = RawDataProcessor.load_category_index(self.prob_config)
 
         # load model
-        with open(self.config["weight_path"], 'rb') as file:
-            self.model = pickle.load(file)
+        # with open(self.config["weight_path"], 'rb') as file:
+        #     self.model = pickle.load(file)
+
+        self.model = mlflow.pyfunc.load_model(self.config["weight_path"])
 
     def detect_drift(self, feature_df) -> int:
         # # watch drift between coming requests and training data
