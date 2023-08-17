@@ -15,7 +15,7 @@ from pydantic import BaseModel
 # import numpy as np
 
 from problem_config import ProblemConst, create_prob_config
-from raw_data_processor import RawDataProcessor
+from raw_data_processor_prob_1 import RawDataProcessorProb1
 # from utils import AppConfig, AppPath
 import mlflow
 
@@ -38,7 +38,7 @@ class ModelPredictor:
         )
 
         # load category_index
-        self.category_index = RawDataProcessor.load_category_index(self.prob_config)
+        self.category_index = RawDataProcessorProb1.load_category_index(self.prob_config)
 
         # load model
         # with open(self.config["weight_path"], 'rb') as file:
@@ -77,7 +77,7 @@ class ModelPredictor:
 
         # preprocess
         raw_df = pd.DataFrame(data.rows, columns=data.columns)
-        feature_df = RawDataProcessor.apply_category_features(
+        feature_df = RawDataProcessorProb1.apply_category_features(
             raw_df=raw_df,
             categorical_cols=self.prob_config.categorical_cols,
             category_index=self.category_index,

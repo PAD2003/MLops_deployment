@@ -16,7 +16,7 @@ from scipy.stats.mstats import winsorize
 from problem_config import ProblemConfig, ProblemConst, get_prob_config
 
 
-class RawDataProcessor:
+class RawDataProcessorProb2:
     @staticmethod
     def build_category_features(data, categorical_cols=None):
         if categorical_cols is None:
@@ -76,14 +76,32 @@ class RawDataProcessor:
     def process_raw_data(prob_config: ProblemConfig):
         logging.info("start process_raw_data")
         training_data = pd.read_parquet(prob_config.raw_data_path)
-        training_data, category_index = RawDataProcessor.build_category_features(
+        training_data, category_index = RawDataProcessorProb2.build_category_features(
             training_data, prob_config.categorical_cols
         )
+
         train, dev = train_test_split(
             training_data,
             test_size=prob_config.test_size,
             random_state=prob_config.random_state,
         )
+
+        input_features = ['feature3', 'feature4', 'feature6', 'feature9', 'feature10', 'feature11', 'feature12',
+                          'feature18', 'feature19', 'feature20', 'feature21', 'feature22', 'feature23', 'feature24',
+                          'feature25', 'feature26', 'feature27', 'feature30', 'feature31', 'feature32', 'feature33',
+                          'feature34', 'feature35', 'feature39', 'feature40']
+
+        # convert label columnn to numerical
+        labels_rank = {'Normal' : 0,
+               'Other' : 1,
+               'Information Gathering' : 2,
+               'Denial of Service' : 3,
+               'Exploits' : 4,
+               'Malware' : 5
+              }
+        
+        train['label'] = train['label'].map(labels_rank)
+        dev['label'] = dev['label'].map(labels_rank)
 
         with open(prob_config.category_index_path, "wb") as f:
             pickle.dump(category_index, f)
@@ -93,13 +111,11 @@ class RawDataProcessor:
             train[feature] = winsorize(train[feature], (0.01, 0.02))
 
         target_col = prob_config.target_col
-        train_x = train.drop([target_col], axis=1)
+        train_x = train.drop([target_col], axis=1)[input_features]
         train_y = train[[target_col]]
-        test_x = dev.drop([target_col], axis=1)
+        test_x = dev.drop([target_col], axis=1)[input_features]
         test_y = dev[[target_col]]
 
-        # test_x = RawDataProcessor.convert_numeric_columns_to_float(test_x)
-        # test_y = RawDataProcessor.convert_numeric_columns_to_float(test_y)
 
         # encode categorical features using ordinal encoding
         encoder = TargetEncoder()
@@ -167,4 +183,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     prob_config = get_prob_config(args.phase_id, args.prob_id)
-    RawDataProcessor.process_raw_data(prob_config)
+    RawDataProcessorProb2.process_raw_data(prob_config)
