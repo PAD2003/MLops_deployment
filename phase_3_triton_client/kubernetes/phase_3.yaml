@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phase-3-deploy
+  labels:
+    app: phase-3
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: phase-3
+  template:
+    metadata:
+      labels:
+        app: phase-3
+    spec:
+      containers:
+      - name: phase-3
+        image: pad2003/phase_3:triton_client
+        ports:
+        - containerPort: 5040
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phase-3-svc
+spec:
+  selector:
+    app: phase-3
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5040

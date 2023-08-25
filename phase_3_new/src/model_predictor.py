@@ -140,6 +140,6 @@ class PredictorApi:
 
 if __name__ == "__main__":
     predictor_1 = ModelPredictorProb1(config_file_path="data/model_config/model_prob_1.yaml")
-    predictor_2 = ModelPredictorProb2(config_file_path="data/model_config/model_prob_1.yaml")
+    predictor_2 = ModelPredictorProb2(config_file_path="data/model_config/model_prob_2.yaml")
     api = PredictorApi(predictor_1, predictor_2)
     api.run(port=5040)
