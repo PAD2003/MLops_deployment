@@ -135,8 +135,14 @@ class PredictorApi:
 
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--port", type=int, default=3001)
+    args = parser.parse_args()
+
     client = httpclient.InferenceServerClient(url="localhost:7999")
     predictor_1 = ModelPredictorProb1(config_file_path="data/model_config/model_prob_1.yaml")
     predictor_2 = ModelPredictorProb2(config_file_path="data/model_config/model_prob_2.yaml")
+    
     api = PredictorApi(predictor_1, predictor_2)
-    api.run(port=5040)
+    api.run(port=args.port)
