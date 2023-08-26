@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  gateway:
+    image: nginx
+    restart: on-failure
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./run_env/log/:/var/log/nginx/
+    command:
+      - bash
+      - -c
+      - 'nginx -g "daemon off;"'
+    ports:
+      - 5040:5040
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
